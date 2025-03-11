@@ -17,8 +17,21 @@ function QuestionForm(props) {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    //attempt to put array
+    const answers = [formData.answer1, formData.answer2, formData.answer3, formData.answer4,];
+    const requestBody = { prompt: formData.prompt, answers: answers, correctIndex: formData.correctIndex,};
+
+    try {
+      const apiResp = await fetch('http://localhost:4000/questions', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify(requestBody),});
+
+      if (!apiResp.ok) {
+        throw new Error('Failed to add questions');
+      }
+    } catch (error) {
+      console.error('Error found:', error);
+    }
     console.log(formData);
   }
 
